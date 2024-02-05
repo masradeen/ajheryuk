@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './login_page.dart';
 
 class WelcomePage extends StatelessWidget {
 
@@ -41,9 +42,14 @@ class WelcomePage extends StatelessWidget {
             Container(
               width: MediaQuery.of(context).size.width,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushNamed(LoginPage.nameRoute);
+                },
                 child: Text(
                   "Get Started",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
                 style: ElevatedButton.styleFrom(
                   primary: Color(0xFFEC5F5F),
