@@ -1,3 +1,4 @@
+import 'package:ajheryuk/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
@@ -59,7 +60,7 @@ class LoginPage extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Navigator.of(context).pushNamed(LoginPage.nameRoute);
+                    Navigator.of(context).pushNamed(HomePage.nameRoute);
                   },
                   child: Text(
                     "Log in",
