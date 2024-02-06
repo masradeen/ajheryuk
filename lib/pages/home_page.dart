@@ -1,11 +1,74 @@
+import 'dart:async';
+
+import 'package:ajheryuk/datas/slider_images.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
+List<Widget> sliderItems = images.map((sImage) => Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 15),
+  child: Container(
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: Image.network(
+        sImage,
+        fit: BoxFit.cover,
+      ),
+    ),
+  ),
+)).toList();
+
+class HomePage extends StatefulWidget {
   static const nameRoute = './homepage';
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final PageController _pageController = PageController(initialPage: 0);
+  int currentPage = 0;
+  late Timer timer;
+  int selectedIndex = 0;
+
+  @override
+  void initState() {
+    
+    super.initState();
+    timer = Timer.periodic(const Duration(seconds: 2), (timer) { 
+      if(currentPage < images.length){
+        currentPage++;
+      } else {
+        currentPage = 0;
+      }
+
+      _pageController.animateToPage(
+        currentPage, 
+        duration: const Duration(milliseconds: 200), 
+        curve: Curves.easeIn
+      );
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+
+    Widget dot(bool isactive){
+      return Container(
+        child: CircleAvatar(
+          radius: 8,
+          backgroundColor: isactive? Colors.red : Colors.transparent,
+        ),
+      );
+    }
+
+    List<Widget> dotList(){
+      List<Widget> list =[];
+      for (int i=0; i<images.length; i++){
+        list.add(i == selectedIndex ? dot(true) : dot(false));
+      }
+      return list;
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: ListView(
@@ -188,11 +251,34 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
+          SizedBox(height: 10,),
+          Container(
+            height: MediaQuery.of(context).size.height * 0.25,
+            width: double.infinity,
+            child: Stack(
+              children: [
+                PageView(
+                  controller: _pageController,
+                  children: sliderItems,
+                  onPageChanged: (int page){
+                    setState(() {
+                      selectedIndex = page;
+                    });
+                  },
+                ),
+                Row(
+                  children: dotList(),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 }
+
+
 
 class CategoryItem extends StatelessWidget {
   CategoryItem({
