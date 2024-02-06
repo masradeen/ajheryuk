@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -142,7 +143,82 @@ class HomePage extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10,),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Row(
+              children: [
+                Text(
+                  "Upcoming ",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+                Text(
+                  "course of this week",
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 10,),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                SizedBox(width: 15,),
+                CategoryItem(
+                  title: "All",
+                  status: true,
+                ),
+                CategoryItem(
+                  title: "UI/UX",
+                  status: false,
+                ),
+                CategoryItem(
+                  title: "Illustration",
+                  status: false,
+                ),
+                CategoryItem(
+                  title: "3D Animation",
+                  status: false,
+                ),
+              ],
+            ),
+          ),
         ],
+      ),
+    );
+  }
+}
+
+class CategoryItem extends StatelessWidget {
+  CategoryItem({
+    Key? key,
+    required this.title,
+    required this.status,  
+  });
+
+  final String title;
+  final bool status;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(right: 10),
+      padding: EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: status == true ? Color(0xFFEC5F5F) : Colors.grey[300],
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: 18,
+          color: status == true ? Colors.white : Colors.black54,
+        ),
       ),
     );
   }
