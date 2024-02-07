@@ -4,18 +4,20 @@ import 'package:ajheryuk/datas/slider_images.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
-List<Widget> sliderItems = images.map((sImage) => Padding(
-  padding: const EdgeInsets.symmetric(horizontal: 15),
-  child: Container(
-    child: ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-      child: Image.network(
-        sImage,
-        fit: BoxFit.cover,
-      ),
-    ),
-  ),
-)).toList();
+List<Widget> sliderItems = images
+    .map((sImage) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Container(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.network(
+                sImage,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        ))
+    .toList();
 
 class HomePage extends StatefulWidget {
   static const nameRoute = './homepage';
@@ -32,38 +34,47 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    
     super.initState();
-    timer = Timer.periodic(const Duration(seconds: 2), (timer) { 
-      if(currentPage < images.length){
+    timer = Timer.periodic(const Duration(seconds: 4), (timer) {
+      if (currentPage < images.length) {
         currentPage++;
       } else {
         currentPage = 0;
       }
 
       _pageController.animateToPage(
-        currentPage, 
-        duration: const Duration(milliseconds: 200), 
-        curve: Curves.easeIn
+        currentPage,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeIn,
       );
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    Widget dot(bool isactive) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 3),
+        
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey,
+            ),
+            borderRadius: BorderRadius.circular(50),
+          ),
 
-    Widget dot(bool isactive){
-      return Container(
-        child: CircleAvatar(
-          radius: 8,
-          backgroundColor: isactive? Colors.red : Colors.transparent,
+          child: CircleAvatar(
+            radius: 4,
+            backgroundColor: isactive ? Color(0xFFEC5F5F) : Color(0xFFEEEEEE),
+          ),
         ),
       );
     }
 
-    List<Widget> dotList(){
-      List<Widget> list =[];
-      for (int i=0; i<images.length; i++){
+    List<Widget> dotList() {
+      List<Widget> list = [];
+      for (int i = 0; i < images.length; i++) {
         list.add(i == selectedIndex ? dot(true) : dot(false));
       }
       return list;
@@ -116,7 +127,9 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                SizedBox(width: 15,),
+                SizedBox(
+                  width: 15,
+                ),
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -133,7 +146,9 @@ class _HomePageState extends State<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Image.asset("assets/icons/award.png"),
-                          SizedBox(width: 5,),
+                          SizedBox(
+                            width: 5,
+                          ),
                           Text(
                             "+1600",
                             style: TextStyle(
@@ -188,24 +203,46 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                SizedBox(width: 15,),
-                StoryItem(image: "assets/images/story-1.jpg",),
-                StoryItem(image: "assets/images/story-2.jpg",),
-                StoryItem(image: "assets/images/story-3.jpg",),
-                StoryItem(image: "assets/images/story-4.jpg",),
-                StoryItem(image: "assets/images/story-5.jpg",),
-                StoryItem(image: "assets/images/story-6.jpg",),
-                StoryItem(image: "assets/images/story-7.jpg",),
-                StoryItem(image: "assets/images/story-8.jpg",),
+                SizedBox(
+                  width: 15,
+                ),
+                StoryItem(
+                  image: "assets/images/story-1.jpg",
+                ),
+                StoryItem(
+                  image: "assets/images/story-2.jpg",
+                ),
+                StoryItem(
+                  image: "assets/images/story-3.jpg",
+                ),
+                StoryItem(
+                  image: "assets/images/story-4.jpg",
+                ),
+                StoryItem(
+                  image: "assets/images/story-5.jpg",
+                ),
+                StoryItem(
+                  image: "assets/images/story-6.jpg",
+                ),
+                StoryItem(
+                  image: "assets/images/story-7.jpg",
+                ),
+                StoryItem(
+                  image: "assets/images/story-8.jpg",
+                ),
               ],
             ),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 20,
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Row(
@@ -226,12 +263,16 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 20,
+          ),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                SizedBox(width: 15,),
+                SizedBox(
+                  width: 15,
+                ),
                 CategoryItem(
                   title: "All",
                   status: true,
@@ -251,23 +292,47 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 20,
+          ),
           Container(
-            height: MediaQuery.of(context).size.height * 0.25,
+            height: MediaQuery.of(context).size.height * 0.4,
             width: double.infinity,
             child: Stack(
               children: [
                 PageView(
                   controller: _pageController,
                   children: sliderItems,
-                  onPageChanged: (int page){
+                  onPageChanged: (int page) {
                     setState(() {
                       selectedIndex = page;
                     });
                   },
                 ),
-                Row(
-                  children: dotList(),
+                // Positioned(
+                //   bottom: 2,
+                //   right: MediaQuery.of(context).size.width * 0.4,
+                //   child: Row(
+                //     children: dotList(),
+                //   ),
+                // ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+              top: 4,
+              left: MediaQuery.of(context).size.width * 0.4,
+            ),
+            
+            child: Row(
+              children: [
+                Positioned(
+                  bottom: 2,
+                  right: MediaQuery.of(context).size.width * 0.4,
+                  child: Row(
+                    children: dotList(),
+                  ),
                 ),
               ],
             ),
@@ -278,13 +343,11 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-
-
 class CategoryItem extends StatelessWidget {
   CategoryItem({
     Key? key,
     required this.title,
-    required this.status,  
+    required this.status,
   });
 
   final String title;
@@ -333,10 +396,9 @@ class StoryItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(30),
               border: Border.all(
                 color: Color(0xFFEC5F5F),
-                  width: 5,
+                width: 5,
               ),
             ),
-            
             child: Container(
               padding: EdgeInsets.all(5),
               width: 90,
