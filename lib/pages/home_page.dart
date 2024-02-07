@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:ajheryuk/datas/slider_images.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 List<Widget> sliderItems = images
@@ -32,30 +31,79 @@ class _HomePageState extends State<HomePage> {
   late Timer timer;
   int selectedIndex = 0;
 
+  //untuk navbar
+  int _selectedNavIndex = 0;
+
+  void _onNavbarTapped(int index){
+    setState(() {
+      _selectedNavIndex = index;
+    });
+  }
+
+
+
   @override
   void initState() {
     super.initState();
-    timer = Timer.periodic(const Duration(seconds: 4), (timer) {
-      if (currentPage < images.length) {
-        currentPage++;
-      } else {
-        currentPage = 0;
-      }
 
-      _pageController.animateToPage(
-        currentPage,
-        duration: const Duration(milliseconds: 400),
-        curve: Curves.easeIn,
-      );
-    });
+    //untuk buat auto slideshow
+    // timer = Timer.periodic(const Duration(seconds: 4), (timer) {
+    //   if (currentPage < images.length) {
+    //     currentPage++;
+    //   } else {
+    //     currentPage = 0;
+    //   }
+
+    //   _pageController.animateToPage(
+    //     currentPage,
+    //     duration: const Duration(milliseconds: 400),
+    //     curve: Curves.easeIn,
+    //   );
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget dot(bool isactive) {
+
+    final _listPage = <Widget>[
+      const Text("Home"),
+      const Text("Discover"),
+      const Text("Messages"),
+      const Text("Profile"),
+    ];
+
+    final _bottomNavBarItems = <BottomNavigationBarItem>[
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.home),
+        label: "Home",
+      ),
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.explore),
+        label: "Discover",
+      ),
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.mail),
+        label: "Discover",
+      ),
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.person),
+        label: "Discover",
+      ),
+    ];
+
+    final _bottomNavBar = BottomNavigationBar(
+      type: BottomNavigationBarType.shifting,
+      // backgroundColor: Colors.amber,
+      items: _bottomNavBarItems,
+      currentIndex: _selectedNavIndex,
+      unselectedItemColor: Color(0xFFC7C9D9),
+      selectedItemColor: Color(0xFFEC5F5F),
+      onTap: _onNavbarTapped,
+    );
+
+    Widget dot(bool isactive, int index) {
       return Padding(
         padding: const EdgeInsets.only(left: 3),
-        
         child: Container(
           decoration: BoxDecoration(
             border: Border.all(
@@ -63,10 +111,18 @@ class _HomePageState extends State<HomePage> {
             ),
             borderRadius: BorderRadius.circular(50),
           ),
-
-          child: CircleAvatar(
-            radius: 4,
-            backgroundColor: isactive ? Color(0xFFEC5F5F) : Color(0xFFEEEEEE),
+          child: InkWell(
+            child: CircleAvatar(
+              radius: 4,
+              backgroundColor: isactive ? Color(0xFFEC5F5F) : Color(0xFFEEEEEE),
+            ),
+            onTap: () {
+              _pageController.animateToPage(
+                index,
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.easeIn,
+              );
+            },
           ),
         ),
       );
@@ -75,7 +131,7 @@ class _HomePageState extends State<HomePage> {
     List<Widget> dotList() {
       List<Widget> list = [];
       for (int i = 0; i < images.length; i++) {
-        list.add(i == selectedIndex ? dot(true) : dot(false));
+        list.add(i == selectedIndex ? dot(true, i) : dot(false, i));
       }
       return list;
     }
@@ -296,7 +352,7 @@ class _HomePageState extends State<HomePage> {
             height: 20,
           ),
           Container(
-            height: MediaQuery.of(context).size.height * 0.4,
+            height: MediaQuery.of(context).size.height * 0.37,
             width: double.infinity,
             child: Stack(
               children: [
@@ -309,36 +365,23 @@ class _HomePageState extends State<HomePage> {
                     });
                   },
                 ),
-                // Positioned(
-                //   bottom: 2,
-                //   right: MediaQuery.of(context).size.width * 0.4,
-                //   child: Row(
-                //     children: dotList(),
-                //   ),
-                // ),
               ],
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(
-              top: 4,
-              left: MediaQuery.of(context).size.width * 0.4,
-            ),
-            
-            child: Row(
-              children: [
-                Positioned(
-                  bottom: 2,
-                  right: MediaQuery.of(context).size.width * 0.4,
-                  child: Row(
-                    children: dotList(),
-                  ),
-                ),
-              ],
+          Container(
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: 4,
+                left: MediaQuery.of(context).size.width * 0.4,
+              ),
+              child: Row(
+                children: dotList(),
+              ),
             ),
           ),
         ],
       ),
+      bottomNavigationBar: _bottomNavBar,
     );
   }
 }
